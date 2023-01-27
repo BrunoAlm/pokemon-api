@@ -1,2 +1,2 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+## Utilizando API's com Dart
+Nesse repositório fiz algumas funções para testar o uso de apis
