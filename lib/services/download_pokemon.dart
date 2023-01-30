@@ -17,7 +17,7 @@ Future<void> downloadPokemonImage(String pokemonName) async {
 
     //  aqui você pode usar a url para baixar a imagem
     var responseImg = await http.get(Uri.parse(imageUrl));
-    var file = File('$pokemonName.jpg');
+    var file = File('./img_gerado/$pokemonName.jpg');
     await file.writeAsBytes(responseImg.bodyBytes);
   } else {
     print("Erro ao buscar Pokemon: ${response.statusCode}");

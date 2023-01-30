@@ -1,51 +1,25 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:pokemon_api/get_pokemon_number.dart';
-
-import 'download_pokemon.dart';
-
-Future<void> createTextFile(List<dynamic> pokemons) async {
-  File file = File('pokemons.txt');
-  String contents = pokemons.map((pokemon) => pokemon['name']).join('\n');
-  await file.writeAsString(contents);
-}
-
-Future<void> readTextFile() async {
-  try {
-    File file = File('pokemons.txt');
-    List<String> lines = await file.readAsLines();
-    for (var line in lines) {
-      print(line);
-    }
-  } catch (e) {
-    print('Error reading file: $e');
-  }
-}
-
-Future<List<dynamic>> getPokemons(int qtd) async {
-  final response = await http
-      .get(Uri.parse('https://pokeapi.co/api/v2/pokemon/?limit=$qtd&offset=0'));
-  if (response.statusCode == 200) {
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    return jsonResponse['results'];
-  } else {
-    throw Exception('Failed to load pokemons');
-  }
-}
+import 'package:pokemon_api/services/get_pokemon_number.dart';
+import 'package:pokemon_api/services/cria_txt.dart';
+import 'package:pokemon_api/services/ler_txt.dart';
+import 'package:pokemon_api/services/procura_pokemon.dart';
+import 'services/download_pokemon.dart';
 
 void main() async {
-  stdout.write('Qual a quantidade de pokemons procurar? ');
-  int pokemonqtd = int.parse(stdin.readLineSync()!.trim());
-  List<dynamic> pokemons = await getPokemons(pokemonqtd);
-  await createTextFile(pokemons);
-  print('File created!');
-  print('Reading File!');
-  await readTextFile();
-  stdout.write('Which Pokemon do you want to know the number of? ');
-  String pokemonName = stdin.readLineSync()!.trim();
-  await getPokemonNumber(pokemonName);
-  // Obtém a URL da imagem
-  await downloadPokemonImage(pokemonName);
+  stdout.write('Pokédex super bolada');
+  stdout.write('\n');
+  stdout.write('Qual a quantidade de pokemon procurar? ');
+  int qtdPokemon = int.parse(stdin.readLineSync()!.trim());
+  // Pega a quantidade de pokémon pra pesquisar na lista
+  List<dynamic> listaPokemon = await procuraPokemon(qtdPokemon);
+  // Cria um TXT com os pokémon
+  await criaTXT(nomePokemons: listaPokemon, qtd: qtdPokemon);
+  // Lê o TXT com os pokémon
+  await lerTXT(qtd: qtdPokemon);
+  stdout.write('Deseja saber o número de qual pokemon?');
+  String nomePokemon = stdin.readLineSync()!.trim();
+  // Pega o nome do pokémon que deseja saber o número na pokédex
+  await pegaNumeroPokemon(nomePokemon);
+  // Faz o download da imagem
+  await downloadPokemonImage(nomePokemon);
 }
