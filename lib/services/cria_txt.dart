@@ -7,4 +7,5 @@ Future<void> criaTXT({List<dynamic>? nomePokemons, int? qtd}) async {
   File file = File('./txt_gerado/${qtd}_pokemons.txt');
   String contents = nomePokemons!.map((pokemon) => pokemon['name']).join('\n');
   await file.writeAsString(contents);
+  print('Lista com $qtd pokémon gerada!');
 }

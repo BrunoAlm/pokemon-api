@@ -7,6 +7,7 @@ Future<void> lerTXT({int? qtd}) async {
     for (var line in lines) {
       print(line);
     }
+    print('Lista com $qtd pokémon gerada!');
   } catch (e) {
     print('Error reading file: $e');
   }
